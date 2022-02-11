@@ -10,11 +10,12 @@ const ref = {
     email: document.querySelector('.feedback-form input'),
 };
 
+const refs = { /*form: document.querySelector('.feedback-form')*/}; /* при заполненом объекте - проблема, при  закомент - ошибка*/
+
 ref.form.addEventListener('submit', onFormSubmit);
 ref.formInput.addEventListener('input', throttle(onFormInput, 500));/*используем throttle чтоб уменьшить частоту вызова ф-ии */
 
 populateFormData();
-
 
 function onFormInput(evt) {
     formData[evt.target.name] = evt.target.value;
@@ -36,15 +37,16 @@ function onFormSubmit(evt) {
 
     localStorage.removeItem(STORAGE_KEY);/*убираем сообщение из хранилища*/
 }
-
+/*получаем значение из локалСторидж, если там чto есть - обнавляем DOM (заполняем поля формы)*/
 function populateFormData(){
     const saveFormData = localStorage.getItem(STORAGE_KEY);
     if (saveFormData) {
-        const parsedFormData = JSON.parse(saveFormData);
-        ref.email.value = parsedFormData.email;
-        ref.textarea.value = parsedFormData.message;
-        console.log(ref.email.value);
-        console.log(ref.textarea.value);
+        const parsedFormData = JSON.parse(saveFormData); /*достаем из локалСторидж, парсим строку в объект*/
+            Object.entries(parsedFormData).forEach(([key, value]) => {    /*Object.entries() метод возвращает массив собственных перечисляемых свойств*/
+            formData[key] = value;
+            refs.form.elements[key].value = value;
+        });
+
     };
  }
 
@@ -59,6 +61,11 @@ function populateFormData(){
 //     // const parsedFormData = {} ;/*достаем из локалСторидж, парсим строку в объект*/
 //         if (saveFormData) {
 //             const parsedFormData = JSON.parse(saveFormData);/*достаем из локалСторидж, парсим строку в объект*/
+
+        /*ref.email.value = parsedFormData.email;
+        ref.textarea.value = parsedFormData.message;
+        console.log(ref.email.value);
+        console.log(ref.textarea.value);*/
 
 //     if (parsedFormData.message) {
 
