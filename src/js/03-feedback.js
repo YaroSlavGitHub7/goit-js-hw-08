@@ -2,7 +2,7 @@
 import throttle from 'lodash.throttle';/*из  библиотеки lodash используем только throttle */
 
 const formData = {};
-const STORAGE_KEY = "feedback-form-state"; /* избавляемся от строк где можно допустить ошибку - патерн"магические строки"*/
+const STORAGE_KEY = "feedback-form-state" /* избавляемся от строк где можно допустить ошибку - патерн"магические строки"*/
 const ref = {
     form: document.querySelector('.feedback-form'),
     formInput: document.querySelector('.feedback-form'),
@@ -13,36 +13,90 @@ const ref = {
 ref.form.addEventListener('submit', onFormSubmit);
 ref.formInput.addEventListener('input', throttle(onFormInput, 500));/*используем throttle чтоб уменьшить частоту вызова ф-ии */
 
+populateFormData();
+
+
 function onFormInput(evt) {
     formData[evt.target.name] = evt.target.value;
     // console.log(formData);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));/*сохраняем в локалСторидж в виде строки*/
 }   
 
-/* останавливаем поведение по умолчанию*/
-/*убираем сообщение из хранилища и очищаем форму + */
 function onFormSubmit(evt) {
-    evt.preventDefault();
-    console.log(`E-mail: ${ref.email.value}, Message: ${ref.textarea.value}`);
-    evt.currentTarget.reset();
-    localStorage.removeItem(STORAGE_KEY);
-    /*корректно не работает
-    // if (ref.email.value === "" || ref.textarea.value === "") {
-    //     alert("Пожалуйста, заполните все поля")
-    //     return;
-    // }*/
-}
-populateFormData();
+    evt.preventDefault();/* останавливаем поведение по умолчанию*/
 
-/*получаем значение из локалСторидж, если там чё есть - обнавляем DOM (заполняем поля формy)*/
+    if (ref.email.value === "" || ref.textarea.value === "") {
+        alert("Пожалуйста, заполните все поля");
+        return;
+    };
+    console.log(`E-mail: ${ref.email.value}, Message: ${ref.textarea.value}`);/*выводим сообщение в консоль*/
+        //ref.email.value = ''; /*попытка очистить поле*/ 
+        // ref.textarea.value = '';
+    evt.currentTarget.reset();/*очищаем форму*/
+
+    localStorage.removeItem(STORAGE_KEY);/*убираем сообщение из хранилища*/
+}
+
 function populateFormData(){
     const saveFormData = localStorage.getItem(STORAGE_KEY);
-    if (saveFormData){
-        const parsedFormData = JSON.parse(saveFormData);/*достаем из локалСторидж, парсим строку в объект*/
+    if (saveFormData) {
+        const parsedFormData = JSON.parse(saveFormData);
         ref.email.value = parsedFormData.email;
         ref.textarea.value = parsedFormData.message;
+        console.log(ref.email.value);
+        console.log(ref.textarea.value);
     };
-}
+ }
+
+
+
+
+
+// /*не удачная попытка*/
+// /*получаем значение из локалСторидж, если там чё есть - обнавляем DOM (заполняем поля формy)*/
+// function populateFormData() {
+//     const saveFormData = localStorage.getItem(STORAGE_KEY);
+//     // const parsedFormData = {} ;/*достаем из локалСторидж, парсим строку в объект*/
+//         if (saveFormData) {
+//             const parsedFormData = JSON.parse(saveFormData);/*достаем из локалСторидж, парсим строку в объект*/
+
+//     if (parsedFormData.message) {
+
+//         ref.textarea.value = parsedFormData.message;
+//             console.log(ref.textarea.value);
+//     }
+//     //     else {
+//     //     ref.textarea.value = "";
+//     // };
+    
+//             if (parsedFormData.email) {
+//                 // const parsedFormData = JSON.parse(saveFormData);
+//                 ref.email.value = parsedFormData.email;
+//                 console.log(ref.email.value);
+//             }
+//     }
+//     //     else {
+//     //         ref.email.value = "";
+//     // };
+//         // console.log(ref.email.value);
+//     // console.log(ref.textarea.value);
+// }
+//     // return
+//     // }
+//     // else {
+//     //     ref.email.value = "";
+//     //     ref.textarea.value = "";
+//     //     console.log(ref.email.value);
+//     //     console.log(ref.textarea.value);
+//     //     return
+//     // }
+        
+//     // console.log(ref.email.value);
+//     //     console.log(ref.textarea.value);
+//     // };
+
+
+
 
 
 
@@ -63,7 +117,7 @@ function populateFormData(){
 
 
 
-/*по А.Репете форма с одним полем textarea*/
+// /*по А.Репете форма с одним полем textarea*/
 
 // import throttle from 'lodash.throttle';/*из  библиотеки lodash используем только throttle */
 
@@ -101,5 +155,3 @@ function populateFormData(){
 //     console.log(saveMessage);
 // }
 // }
-
-
