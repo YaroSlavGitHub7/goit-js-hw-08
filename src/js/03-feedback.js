@@ -1,4 +1,6 @@
 
+
+
 import throttle from 'lodash.throttle';/*из  библиотеки lodash используем только throttle */
 
 const formData = {};
@@ -9,8 +11,6 @@ const ref = {
     textarea: document.querySelector('.feedback-form textarea'),/*добавил т.к. не смог вспомнить/найти метод записать значения в форму*/
     email: document.querySelector('.feedback-form input'),
 };
-
-const refs = { /*form: document.querySelector('.feedback-form')*/}; /* при заполненом объекте - проблема, при  закомент - ошибка*/
 
 ref.form.addEventListener('submit', onFormSubmit);
 ref.formInput.addEventListener('input', throttle(onFormInput, 500));/*используем throttle чтоб уменьшить частоту вызова ф-ии */
@@ -31,20 +31,20 @@ function onFormSubmit(evt) {
         return;
     };
     console.log(`E-mail: ${ref.email.value}, Message: ${ref.textarea.value}`);/*выводим сообщение в консоль*/
-        //ref.email.value = ''; /*попытка очистить поле*/ 
-        // ref.textarea.value = '';
     evt.currentTarget.reset();/*очищаем форму*/
 
     localStorage.removeItem(STORAGE_KEY);/*убираем сообщение из хранилища*/
 }
-/*получаем значение из локалСторидж, если там чto есть - обнавляем DOM (заполняем поля формы)*/
+
+const refs = {/*form: document.querySelector('.feedback-form')*/}; /* при заполненом объекте - проблема, при  закомент - ошибка*/
 function populateFormData(){
     const saveFormData = localStorage.getItem(STORAGE_KEY);
     if (saveFormData) {
         const parsedFormData = JSON.parse(saveFormData); /*достаем из локалСторидж, парсим строку в объект*/
-            Object.entries(parsedFormData).forEach(([key, value]) => {    /*Object.entries() метод возвращает массив собственных перечисляемых свойств*/
+            Object.entries(parsedFormData).forEach(([key, value]) => { /*Object.entries() метод возвращает массив собственных перечисляемых свойств*/
             formData[key] = value;
-            refs.form.elements[key].value = value;
+                refs.form.elements[key].value = value;
+                // console.log(ref.form.elements[key].value);
         });
 
     };
@@ -54,7 +54,10 @@ function populateFormData(){
 
 
 
-// /*не удачная попытка*/
+// /*не удачные попытки*/
+        //ref.email.value = ''; /*попытка очистить поле*/ 
+        // ref.textarea.value = '';
+
 // /*получаем значение из локалСторидж, если там чё есть - обнавляем DOM (заполняем поля формy)*/
 // function populateFormData() {
 //     const saveFormData = localStorage.getItem(STORAGE_KEY);
@@ -101,12 +104,6 @@ function populateFormData(){
 //     // console.log(ref.email.value);
 //     //     console.log(ref.textarea.value);
 //     // };
-
-
-
-
-
-
 
 
 // В HTML есть разметка формы.Напиши скрипт который будет сохранять значения полей 
