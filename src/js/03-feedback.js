@@ -36,14 +36,14 @@ function onFormSubmit(evt) {
     localStorage.removeItem(STORAGE_KEY);/*убираем сообщение из хранилища*/
 }
 
-const refs = {/*form: document.querySelector('.feedback-form')*/}; /* при заполненом объекте - проблема, при  закомент - ошибка*/
+// const refs = {/*form: document.querySelector('.feedback-form')*/}; /* при заполненом объекте - проблема, при  закомент - ошибка*/
 function populateFormData(){
     const saveFormData = localStorage.getItem(STORAGE_KEY);
     if (saveFormData) {
         const parsedFormData = JSON.parse(saveFormData); /*достаем из локалСторидж, парсим строку в объект*/
             Object.entries(parsedFormData).forEach(([key, value]) => { /*Object.entries() метод возвращает массив собственных перечисляемых свойств*/
             formData[key] = value;
-                refs.form.elements[key].value = value;
+                ref.form.elements[key].value = value;
                 // console.log(ref.form.elements[key].value);
         });
 
